@@ -1,0 +1,6 @@
+README
+
+ramtrom.c contains the most current tests to test the interface between the MSP430 and the External Flash from Microchip, part number SST25WF020 or SST25WF040. The datasheet is here: 
+http://ww1.microchip.com/downloads/en/DeviceDoc/25016A.pdf
+
+The other files should be excluded from build, and serve as reference files. The onse starting with msp430x are from TI and include a master SPI example and a slave SPI example. The file labelled deyu_test.c was the original code used by Lydia an Deyu to test SPI with the external flash from microchip
