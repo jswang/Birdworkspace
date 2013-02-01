@@ -1,0 +1,55 @@
+notes_1_30
+
+							Variables
+To set variables:
+**a=2
+**echo $a
+
+Postiional Paramters:
+$0, $1 refer to the first argument an the second argument
+
+$@ exapnds to all positional arguments. with double quotes, will deal with arguments with a space in double qutoes as a single argument. without double quotes, even if your argument has quotes around a space, it will expand as if there are no quotes 
+$* without double quotes does same as @. $* in "" will expand all arguments into one big string
+
+**expr allows you to do math in the shell. 
+	note, to do multiplication, use "*"
+
+
+
+						Globbing: {} * ? []
+This will not work: expr 2 * 3. 
+The shell will expand the * into the files in your current directory
+
+* = WILDCARD. expands to a list of everything in the current directory.  It can be any string at all. 
+**echo * almost the same as ls
+**echo *.c will expand to all files in current directory that end in .c. 
+
+? = matches any character once. 
+
+[] = has at least one of something in the bracket at that position
+**echo prog[1-3] will find everything with prog then 1, 2, 3. range of anything that sorts into it
+If you do echo prgo[1=10] this will return prog1 and prog0 files, but NOT prog10. It is character matching, not value matching. 
+
+{} = will expand to three words in the braces. Inserts spaces between arguments. 
+**echo blah-{foo, bar, 3}-blahhh will expand to blah-foo-blahhh, blah-bar-blahhh, blah-3-bahhh
+
+						Regular Expressions
+In regular expressions, * is a not a wildcard by itself. If you put a star after a character, it will look math 0 or more of that character.
+**grep '.' /usr/share/dict/words | wc -l
+will look for every string with any character in it. The only thing this will not find is the empty string
+^ will only match the beginning of a string. To look for all words that start with b:
+** grep '^b' 
+$ matches the ends of the string:
+** grep 'ing$'
+To match the entire string:
+** grep '^love$'
+Start with any character then end with it:
+**grep '^.it$'
+**$^ matches an empty line
+
+In [] you can make character classes: 
+**grep '[[:space:]]' will look for the space character
+**'[[:alnum:]]' will look for alphabet letters and numbers but will not look for punctuation
+To look for special characters, you can either:
+	- exit with a backslash '\*'
+	- character class it [*]
