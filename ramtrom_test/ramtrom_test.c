@@ -45,7 +45,7 @@ void main(void) {
 
 /*************************test area*********/
 	i = 0x3456;
-	
+
 	write(i, &mem);
 /***********************/
 
@@ -101,13 +101,24 @@ uint8_t write(unsigned long addr_write_to, Mem_block* mem){
 	SPI_WAIT_DONE();
 	SPI_WRITE_BYTE(sbytes[3]);
 	SPI_WAIT_DONE();
-	
+
 	for (i = mem->base_addr; i < mem->base_addr + mem->length; i++){
 		SPI_WRITE_BYTE(*i);
 		SPI_WAIT_DONE();
 	}
-	
-	
+
+
+}
+
+uint8_t sleep_on(void){
+	SPI_TURN_CHIP_SELECT_OFF();
+	SPI_TURN_CHIP_SELECT_ON();
+	SPI_WRITE_BYTE(SLEEP);
+	SPI_TURN_CHIP_SELECT_OFF();
+}
+
+uint8_t wake(void){
+	read_id();
 }
 
 uint8_t read_id(void){
@@ -133,14 +144,14 @@ static uint8_t spiRegAccess(uint8_t writeValue)
 	/* turn chip select "off" and then "on" to clear any current SPI access */
   	SPI_TURN_CHIP_SELECT_OFF();
   	SPI_TURN_CHIP_SELECT_ON();
-	
+
 	/*
    *  Send the byte value to write.  If this operation is a read, this value
    *  is not used and is just dummy data.  Wait for SPI access to complete.
    */
    	SPI_WRITE_BYTE(writeValue);
   	SPI_WAIT_DONE();
-  	
+
   	/*
    *  If this is a read operation, SPI data register now contains the register
    *  value which will be returned.  For a read operation, it contains junk info
