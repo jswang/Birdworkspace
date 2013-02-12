@@ -4,6 +4,7 @@
 #include <stdint.h>
 /** Specific ports */
 #define CE_OUT 	P4OUT	//Using port 4.3 for chipo select
+#define CE_DIR	P4DIR
 #define CE_PORT	BIT3
 /*******************/
 
@@ -12,20 +13,24 @@
 /*******************/
 
 /*Function and type defintions**********/
-typedef struct{
-	uint8_t* base_addr; //contains address of one byte
-	unsigned int length;
-} Mem_block;
-uint8_t read_id(void);
-uint8_t write(unsigned long addr_write_to, Mem_block* mem);
-
+//typedef struct{
+//	uint8_t* base_addr; //contains address of one byte
+//	unsigned int length;
+//} Mem_block;
+void ramtron_read_id(uint8_t *pData);
+void ramtron_write(unsigned long addr_write_to, uint8_t *pData, uint8_t len);
+void ramtron_read(unsigned long addr_write_to, uint8_t *pData, uint8_t len);
+void ramtron_sleep_on(void);
+void ramtron_wake(void);
 
 /* SPI Macros ********/
 #define SPI_TURN_CHIP_SELECT_OFF() 		CE_OUT |= CE_PORT
 #define SPI_TURN_CHIP_SELECT_ON() 		CE_OUT &= ~CE_PORT
-#define SPI_WRITE_BYTE(x)				st(IFG2 &= ~UCB0RXIFG; UCB0TXBUF = x;) 
+#define SPI_WRITE_BYTE(x)				st(IFG2 &= ~UCB0RXIFG; UCB0TXBUF = x;)
 #define SPI_WAIT_DONE()					while(!(IFG2 & UCB0RXIFG));
 #define SPI_READ_BYTE()					UCB0RXBUF
+#define DATA_LENGTH						128
+#define MAX_DATA_CHUNK					128
 
 
 /**********Ramtron specific op-codes***/
@@ -38,7 +43,7 @@ uint8_t write(unsigned long addr_write_to, Mem_block* mem);
 #define WRITE			0x02
 #define	SLEEP			0xB9
 #define RDID			0x9F
-			
+
 
 
 
